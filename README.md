@@ -101,5 +101,4 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - !servericon - Shows the current guild icon
 - !serverinfo - Shows info about the current guild
 - !about - Shows info about the bot
-- !say(e/h) {message} - Sends a message through the bots account, e=@everyone, h=@here
-
+- !say(e/h) {message} - ADMIN COMMAND - Sends a message through the bots account, e=@everyone, h=@here
