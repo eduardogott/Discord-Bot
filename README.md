@@ -1,12 +1,17 @@
 # BotDaGaby
 
-This is a Discord bot I started coding out of boredom, it only works for ONE server per token.
+This is a Discord bot I started coding out of boredom, it only works for ONE server per token.  
 
-[toc]
+- [Commands](#commands)
+  * [Economy](#economy)
+  * [Giveaways](#giveaways)
+  * [Leveling](#leveling)
+  * [Moderation](#moderation---all-commands-are-admin-commands)
+  * [Music](#music)
+  * [Profiles](#profiles)
+  * [Utils/Misc](#utils-misc)
 
 # Commands
-
----
 
 ## Economy
 
@@ -23,7 +28,6 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - !takeitem {player} {item} - ADMIN COMMAND - Takes an item from a player
 - !clearinventory {player} - ADMIN COMMAND - Clears a player inventory
 
----
 
 ## Giveaways
 
@@ -31,7 +35,6 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - !gdelete {id} - Deletes a giveaway based on its message ID 
 - !greroll {id} - Rerolls a giveaway based on its message ID
 
----
 
 ## Leveling
 
@@ -43,7 +46,6 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - !removeexp {member} {exp} - ADMIN COMMAND - Removes an amount of EXP from a member
 - !resetexp {member} - ADMIN COMMAND - Resets a member EXP
 
----
 
 ## Moderation - ALL COMMANDS ARE ADMIN COMMANDS
 
@@ -63,7 +65,6 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - !unwarn {member} - Removes one warn from a member
 - !warnings {member} - Lists all of members active warnings
 
----
 
 ## Music
 
@@ -77,7 +78,6 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - !nowplaying - Shows info about the current music
 - !replay - Adds the current music to the end of the queue
 
----
 
 ## Profiles
 
@@ -86,7 +86,6 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - !rep {member} - Gives a "+rep" to a player
 - !nextbirthdays - Lists the next 10 birthdays
 
----
 
 ## Utils/Misc
 
