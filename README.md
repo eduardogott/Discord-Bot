@@ -10,6 +10,16 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
   * [Music](#music)
   * [Profiles](#profiles)
   * [Utils/Misc](#utils-misc)
+- [Systems](#systems)
+  * [Announcers](#announcers)
+  * [Economy](#economy-1)
+  * [Giveaways](#giveaways-1)
+  * [Leveling](#leveling-1)
+  * [Loggers](#loggers)
+  * [Moderation](#moderation)
+  * [Music](#music-1)
+  * [Profiles](#profiles-1)
+  * [Utils](#utils)
 
 # Commands
 
@@ -102,3 +112,71 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - !serverinfo - Shows info about the current guild
 - !about - Shows info about the bot
 - !say(e/h) {message} - ADMIN COMMAND - Sends a message through the bots account, e=@everyone, h=@here
+
+---
+
+# Systems
+## Announcers
+
+- Twitch annoucer for livestream on
+- YouTube announcer for new videos
+
+
+## Economy
+
+- Economy system with daily bonus, command !work each two hours, and money transfering, all stored in a json database
+- Shop/inventory system, where you spend your money from daily and working, all stored in the database
+- Bonus coins and discounts for selected roles
+- Leaderboard system, showing the top 10 players by balance
+- Admin balance management, like giving or resetting a player balance
+
+
+## Giveaways
+
+- Intuitive giveaway creation system, where you provide the channel it'll take part, the end date, the amount of winners and the prize, one by one, stored in a database
+- System of ending giveaways prematurely, cancelling giveaways and rerolling the giveaway
+
+
+## Leveling
+
+- Leveling system with listeners for messages and time spent in voice calls (default for awaring is each 5 minutes)
+- Bonus points for select roles, like booster or twitch subscriber
+- Leaderboard system, showing the top 10 players by EXP
+- Admin EXP management, like giving or resetting a player EXP
+
+
+## Loggers
+- Announcing system for when a member joins or leaves
+- Logging system for edited profiles, edited messages, pinned messages, deleted messages and bulk deleted messages (!clear)
+
+
+## Moderation
+- System for basic punishments (ban, kick, timeout) with their counterparts (unban, untimeout)
+- All punishments are stored in the database
+- System for managing the guild, with commands like clear, slowmode, (un)lock, (clear)history, for easier management
+- Warnings system with customisable duration (default 30 days) and punishments after 'x' number of warnings, all warnings are stored in the database
+- Auto moderation system, with flood/spam blocker, discord invites blocker and mass mention blocker
+
+
+## Music
+- Default, simple music bot with queue
+- Lyrics command (using Musixmatch API)
+- Replay command, inserting the current music to the end of the queue
+- DJ role for selected commands, like !clearqueue or !pause/!resume
+
+
+## Profiles
+- Profile system with title, birthday, nickname, aboutme, color, image and social media all in the database
+- Easily edit your profile using !edit
+- Reputation system using +rep, with set cooldown (default 1 per day), stored in the database
+- Birthday announcer (every day, set time) in a specific channel
+- Command to see the next 10 birthdays
+
+
+## Utils
+- Various RNGs
+- Jankenpon with coins betting
+- Link shortener using TinyURL API
+- User and guild avatar/icon, banner and info 
+- Informations about the bot
+- Say command to announce this to the server, optional @everyone/@here
