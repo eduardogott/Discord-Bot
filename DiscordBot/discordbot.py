@@ -1,47 +1,3 @@
-# COMMAND LIST:
-# !greroll !gstart !gdelete
-# !ban !kick !unban !clear !timeout !untimeout !slowmode !setnickname !warn !warnings !unwarn !history !clearhistory !lock !unlock
-# !random !dado !jankenpon !escolher !calc !say !sayeveryone !sayhere
-# !avatar !userbanner !serverbanner !servericon !userinfo !serverinfo !sobre
-# !play !forceskip !voteskip !clearqueue !queue !remove !pause !resume !musica
-# !level !rank !expreset !leaderboard !setexp !addexp
-# !profile !rep !edit !nextbirthdays
-
-#* All commands:
-#* ECONOMY: !  
-
-#* All systems
-
-# Anunciador Twitch live, anunciador de vídeo no YouTube
-# Sistema de sorteios (Em database de término, premio e vencedor)
-# Sistema de níveis, com XP por mensagem e tempo de call (Em database, sem perder dados)
-# Sistema de logar mensagens editadas e apagadas, comandos e alterações de nick e avatar
-# Sistema de moderação com diversos comandos diferentes
-# Sistema de advertências com database e punição automática
-# Sistema de música no Discord com fila
-# Sistema de perfis em database com +rep e anúncio de aniversário
-# Sistema de cargo ao entrar e !registro
-# Sistema de exibir as informações do Discord, Twitch e YouTube em forma de canais de voz
-# Vários outros comandos úteis, como encurtador de URL e canais temporários
-
-# FIXME Role names in permissions
-# FIXME Add Wikipedia to utils.py 
-
-# TODO Error handling
-# TODO Temporary channels
-# TODO Ticket system
-# TODO Lyrics in music.py
-# TODO !punir with default reasons and lengths
-# TODO Scheduled messages
-# TODO twitch statistics in statistics.py
-# TODO Embed sender
-# TODO Auto-mod other than repeating the same message
-# TODO Call recording
-# TODO !register command
-# TODO Search pokedex, twitch, youtube, twitter, reddit
-
-# TODO Twitch bot
-
 import discord
 from discord.ext import commands
 
@@ -80,4 +36,4 @@ class BotClient(commands.Bot):
     
 
 bot = BotClient()
-bot.run('MTEwNzM2MTM4MzEwMTc2Nzc3Mg.GZX_Kw.A1dx4TLR3oqgnAZf5pdcuOLU1UbncsoiPX_4xc')
+bot.run('Hidden for obvious reasons')
