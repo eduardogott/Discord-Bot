@@ -9,6 +9,7 @@ Este é um bot de Discord que eu criei quando tava no tédio, só funciona para 
   * [Moderação](#moderação---todos-os-comandos-são-de-admin)
   * [Música](#música)
   * [Perfis](#perfis)
+  * [Cargos](#cargos)
   * [Úteis/Miscelânea](#úteis-miscelânea)
 - [Sistemas](#sistemas)
   * [Anunciadores](#anunciadores)
@@ -19,6 +20,7 @@ Este é um bot de Discord que eu criei quando tava no tédio, só funciona para 
   * [Moderação](#moderação)
   * [Música](#música-1)
   * [Perfis](#perfis-1)
+  * [Cargos](#cargos-1)
   * [Úteis/Miscelânea](#úteis-miscelânea-1)
 
 # Comandos (`!comando (opções) {obrigatório} [opcional]`)
@@ -98,6 +100,10 @@ Este é um bot de Discord que eu criei quando tava no tédio, só funciona para 
 - !nextbirthdays - Lista os próximos 10 aniversários
 
 
+## Cargos
+- !registrar - Inicia o registro
+
+
 ## Úteis/Miscelânea
 
 - !random {min} {max} - Gera um número aleatório entre min-max
@@ -173,6 +179,9 @@ Este é um bot de Discord que eu criei quando tava no tédio, só funciona para 
 - Anunciador de aniversário (todo dia, num horário definido) em um canal customizável
 - Comando para exibir os próximos 10 aniversários
 
+
+## Cargos
+- Sistema de registro com gênero e idade, editável e ampliável
 
 ## Úteis/Miscelânea
 - Vários '*RNGs*', (*lit. geradores aleatórios de número*)
