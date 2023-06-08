@@ -2,24 +2,24 @@
 
 Este é um bot de Discord que eu criei quando tava no tédio, só funciona para UM servidor por token.
 
-- [Comandos](#comandos----comando--op--es---obrigat-rio---opcional---)
+- [Comandos](#comandos----comando--opções---obrigatório---opcional---)
   * [Economia](#economia)
   * [Sorteios](#sorteios)
-  * [Níveis](#n-veis)
-  * [Moderação](#modera--o---todos-os-comandos-s-o-de-admin)
-  * [Música](#m-sica)
+  * [Níveis](#níveis)
+  * [Moderação](#moderação---todos-os-comandos-são-de-admin)
+  * [Música](#música)
   * [Perfis](#perfis)
-  * [Úteis/Miscelânea](#-teis-miscel-nea)
+  * [Úteis/Miscelânea](#úteis-miscelânea)
 - [Sistemas](#sistemas)
   * [Anunciadores](#anunciadores)
   * [Economia](#economia-1)
   * [Sorteios](#sorteios-1)
-  * [Níveis](#n-veis-1)
+  * [Níveis](#níveis-1)
   * [Loggers](#loggers)
-  * [Moderação](#modera--o)
-  * [Música](#m-sica-1)
+  * [Moderação](#moderação)
+  * [Música](#música-1)
   * [Perfis](#perfis-1)
-  * [Úteis/Miscelânea](#-teis-miscel-nea-1)
+  * [Úteis/Miscelânea](#úteis-miscelânea-1)
 
 # Comandos (`!comando (opções) {obrigatório} [opcional]`)
 
