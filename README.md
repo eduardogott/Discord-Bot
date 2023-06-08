@@ -44,6 +44,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - !gcreate {channel} {number_of_winners} {prize} - Creates a giveaway with the provided info
 - !gdelete {id} - Deletes a giveaway based on its message ID 
 - !greroll {id} - Rerolls a giveaway based on its message ID
+- !gend {id} - Ends a giveaway prematurely, based on its message ID
 
 
 ## Leveling
