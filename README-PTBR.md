@@ -181,6 +181,7 @@ Este é um bot de Discord que eu criei quando tava no tédio, só funciona para 
 
 
 ## Cargos
+- Sistema de cargo automático ao entrar no servidor
 - Sistema de registro com gênero e idade, editável e ampliável
 
 ## Úteis/Miscelânea
