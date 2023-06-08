@@ -2,26 +2,26 @@
 
 Este é um bot de Discord que eu criei quando tava no tédio, só funciona para UM servidor por token.
 
-- [Commands](#commands)
-  * [Economy](#economy)
-  * [Giveaways](#giveaways)
-  * [Leveling](#leveling)
-  * [Moderation](#moderation---all-commands-are-admin-commands)
-  * [Music](#music)
-  * [Profiles](#profiles)
-  * [Utils/Misc](#utils-misc)
-- [Systems](#systems)
-  * [Announcers](#announcers)
-  * [Economy](#economy-1)
-  * [Giveaways](#giveaways-1)
-  * [Leveling](#leveling-1)
+- [Comandos](#comandos----comando--op--es---obrigat-rio---opcional---)
+  * [Economia](#economia)
+  * [Sorteios](#sorteios)
+  * [Níveis](#n-veis)
+  * [Moderação](#modera--o---todos-os-comandos-s-o-de-admin)
+  * [Música](#m-sica)
+  * [Perfis](#perfis)
+  * [Úteis/Miscelânea](#-teis-miscel-nea)
+- [Sistemas](#sistemas)
+  * [Anunciadores](#anunciadores)
+  * [Economia](#economia-1)
+  * [Sorteios](#sorteios-1)
+  * [Níveis](#n-veis-1)
   * [Loggers](#loggers)
-  * [Moderation](#moderation)
-  * [Music](#music-1)
-  * [Profiles](#profiles-1)
-  * [Utils](#utils)
+  * [Moderação](#modera--o)
+  * [Música](#m-sica-1)
+  * [Perfis](#perfis-1)
+  * [Úteis/Miscelânea](#-teis-miscel-nea-1)
 
-# Comandos
+# Comandos (`!comando (opções) {obrigatório} [opcional]`)
 
 ## Economia
 
@@ -39,144 +39,145 @@ Este é um bot de Discord que eu criei quando tava no tédio, só funciona para 
 - !clearinventory {player} - ADMIN - Limpa o inventário de um jogador
 
 
-## Giveaways
+## Sorteios
 
-- !gcreate {channel} {number_of_winners} {prize} - Creates a giveaway with the provided info
-- !gdelete {id} - Deletes a giveaway based on its message ID 
-- !greroll {id} - Rerolls a giveaway based on its message ID
-
-
-## Leveling
-
-- !level {member} - Shows a member's EXP, if no member is mentioned, shows your EXP
-- !rank {member} - Shows a member's place on the leaderboard and info about their EXP, or yours if no member is mentioned
-- !leaderboard - Shows top 10 players sorted by EXP
-- !setexp {member} {exp} - ADMIN COMMAND - Sets a member EXP
-- !addexp {member} {exp} - ADMIN COMMAND - Adds an amount of EXP to a member
-- !removeexp {member} {exp} - ADMIN COMMAND - Removes an amount of EXP from a member
-- !resetexp {member} - ADMIN COMMAND - Resets a member EXP
+- !gcreate - Inicia a criação de um sorteio
+- !gdelete {id} - Apaga um sorteio baseado no ID da mensagem
+- !greroll {id} - Refaz o sorteio baseado no ID da mensagem
+- !gend {id} - Encerra um sorteio prematuramente baseado no ID da mensagem
 
 
-## Moderation - ALL COMMANDS ARE ADMIN COMMANDS
+## Níveis
 
-- !ban {member} [reason] - Bans a member for a (optional) reason
-- !unban {member_id} - Unban a member from the guild
-- !kick {member} {reason} - Kicks a member for a (optional) reason
-- !timeout {member} {duration} {reason} - Timeouts a member for a specific time for a (optional) reason
-- !untimeout {member} - Removes the timeout of a member
-- !clear {quantity} - Clears the amount of message from a channel
-- !slowmode {time} - Sets the slowmode of the channel to the specific time
-- !setnickname {member} {nickname} - Sets the nickname of a member
-- !history {member} - List all of member's punishments
-- !clearhistory {member} - Clears member's list of punishments
-- !lock - Locks a channel from the @everyone role
-- !unlock - Unlocks a channel from the @everyone role
-- !warn {member} {reason} - Warns a member for a (optional) reason
-- !unwarn {member} - Removes one warn from a member
-- !warnings {member} - Lists all of members active warnings
+- !level {member} - Exibe o nível e EXP de um jogador, se não mencionado, exibe seu nível e EXP
+- !rank {member} - Exibe o lugar de um membro na tabela e informações sobre seu nível e EXP, se não mencionado, exibe suas informações
+- !leaderboard - Exibe o top 10 jogadores em ordem de EXP
+- !setexp {member} {exp} - ADMIN - Define o EXP de um membro
+- !addexp {member} {exp} - ADMIN - Adiciona EXP a um membro
+- !removeexp {member} {exp} - ADMIN - Remove EXP de um membro
+- !resetexp {member} - ADMIN - Reseta o EXP de um membro
 
 
-## Music
+## Moderação - TODOS OS COMANDOS SÃO DE ADMIN
 
-- !play {music} - Adds a music to the queue from a youtube link or search
-- !skip - Skips the current music
-- !clearqueue - Clears the queue
-- !queue - Lists the musics in the queue
-- !remove {index} - Removes a music from the queue
-- !pause - Pauses the music player
-- !resume - Resumes the music player
-- !nowplaying - Shows info about the current music
-- !replay - Adds the current music to the end of the queue
-
-
-## Profiles
-
-- !edit (title/birthday/nickname/aboutme/color/image/socialmedia) {value} - Edits your profile
-- !profile {member} - Shows member's profile, if no member is mentioned, shows your profile
-- !rep {member} - Gives a "+rep" to a player
-- !nextbirthdays - Lists the next 10 birthdays
+- !ban {member} [reason] - Bane um membro por um motivo (opcional)
+- !unban {member_id} - Desbane um membro do servidor
+- !kick {member} {reason} - Expulsa um membro por um motivo (opcional)
+- !timeout {member} {duration(s/m/h/d)} {reason} - Silencia um membro por tempo determinado por um motivo (opcional)
+- !untimeout {member} - Remove o silenciamento de um membro
+- !clear {quantity} - Limpa a quantidade de mensagens do canal atualn
+- !slowmode {time(s/m/h/d)} - Define o 'modo lento' do canal para uma duração (em segundos)
+- !setnickname {member} {nickname} - Define o nickname de um membro
+- !history {member} - Lista todas as punições de um membro
+- !clearhistory {member} - Limpa a lista de punições de um mebro
+- !lock - Bloqueia o cargo @everyone de falar no canal atual 
+- !unlock - Permite o cargo @everyone de falar no canal atual novamente 
+- !warn {member} {reason} - Adverte um membro por um motivo (opcional) 
+- !unwarn {member} - Remove uma advertência de um membro
+- !warnings {member} - Lista todas as advertências ativas de um membro
 
 
-## Utils/Misc
+## Música
 
-- !random {min} {max} - Generates a random number between min-max
-- !dice {max} - Rolls a dice from the specified size
-- !jankenpon (rock/paper/scissors) - Plays rock-paper-scissors against the bot
-- !choice {multiargs} - Chooses an item from the multiargs, separated by space
-- !shorten {url} - Shortens a URL using TinyURL's API
-- !avatar {member} - Shows member's avatar, if no member is mentioned, shows your avatar
-- !userbanner {member} - Shows member's banner, if no member is mentioned, shows your banner
-- !userinfo {member} - Shows info about a member, if no member is mentioned, shows your info
-- !serverbanner - Shows the current guild banner
-- !servericon - Shows the current guild icon
-- !serverinfo - Shows info about the current guild
-- !about - Shows info about the bot
-- !say(e/h) {message} - ADMIN COMMAND - Sends a message through the bots account, e=@everyone, h=@here
+- !play {music} - Adiciona uma música a fila (link ou 'pesquisa' do YouTube)
+- !skip - Pula a música atual
+- !clearqueue - DJ -Limpa a fila
+- !queue - Lista as musicas na fila
+- !remove {index} - DJ - Remove uma música da fila
+- !pause - Pausa a música atual
+- !resume - Resume a música atual
+- !nowplaying - Exibe informações da música atual
+- !replay - Adiciona a música atual ao final da fila
+
+
+## Perfis
+
+- !edit (title/birthday/nickname/aboutme/color/image/socialmedia) {value} - Edita seu perfil
+- !profile {member} - Exibe o perfil de um membro, se não mencionado, exibe seu perfil
+- !rep {member} - Adiciona um '+rep' a um membro, similar à Steam
+- !nextbirthdays - Lista os próximos 10 aniversários
+
+
+## Úteis/Miscelânea
+
+- !random {min} {max} - Gera um número aleatório entre min-max
+- !dice {max} - Rola um dado do tamanho específico
+- !jankenpon (rock/paper/scissors) - Joga pedra papel tesoura contra o bot
+- !choice {multiargs} - Escolhe um ítem do 'multiargs', separados por espaço
+- !shorten {url} - Encurta uma URL usando a API do TinyURL
+- !avatar {member} - Exibe o avatar de um membro, se não mencionado, exibe o seu
+- !userbanner {member} - Exibe o banner de um membro, se não mencionado, exibe o seu
+- !userinfo {member} - Exibe infomações sobre um membro, se não mencionado, exibe o seu
+- !serverbanner - Exibe o banner do servidor atual
+- !servericon - Exibe o ícone do servidor atual
+- !serverinfo - Exibe informações sobre o servidor atual
+- !about - Exibe informações sobre o bot e seu criador
+- !say(e/h) {message} - ADMIN - Envia uma mensagem pela conta do bot, e=@everyone, h=@here
 
 ---
 
-# Systems
-## Announcers
+# Sistemas
+## Anunciadores
 
-- Twitch annoucer for livestream on
-- YouTube announcer for new videos
-
-
-## Economy
-
-- Economy system with daily bonus, command !work each two hours, and money transfering, all stored in a json database
-- Shop/inventory system, where you spend your money from daily and working, all stored in the database
-- Bonus coins and discounts for selected roles
-- Leaderboard system, showing the top 10 players by balance
-- Admin balance management, like giving or resetting a player balance
+- Anunciador de live on na Twitch
+- Anunciador de vídeo novo no YouTube
 
 
-## Giveaways
+## Economia
 
-- Intuitive giveaway creation system, where you provide the channel it'll take part, the end date, the amount of winners and the prize, one by one, stored in a database
-- System of ending giveaways prematurely, cancelling giveaways and rerolling the giveaway
+- Sistema de economia com bônus diário, comando !trabalhar a cada duas horas e transferência de dinheiro, tudo salvo em uma database .json
+- Sistema de loja e inventário, onde você pode gastar seus coins, tudo salvo na database
+- Coins bônus e descontos para cargos específicos, como Sub ou Booster
+- Sistema de tabela de liderança, exibindo os 10 jogadores com mais coins
+- Gerenciamento de saldo para Admins, com comandos coom adicionar e resetar coins
 
 
-## Leveling
+## Sorteios
 
-- Leveling system with listeners for messages and time spent in voice calls (default for awaring is each 5 minutes)
-- Bonus points for select roles, like booster or twitch subscriber
-- Leaderboard system, showing the top 10 players by EXP
-- Admin EXP management, like giving or resetting a player EXP
+- Sistema intuitivo para criação de sorteios, onde você insere o canal que irá acontecer, a duração, o número de ganhadores e o prêmio um por um, tudo salvo na database
+- Sistema para encerrar sorteios prematuramente, cancelar sorteios ou resortear um ganhador
+
+
+## Níveis
+
+- Sistema de nivelamento com '*listeners*' para mensagens e tempo gasto em canais de voz (tempo padrão para recompensa é a cada 5 minutos)
+- Pontos bônus para cargos específicos, como Sub ou Booster
+- Sistema de tabela de liderança, exibindo os 10 jogadores com mais EXP
+- Gerenciamento de EXP para Admins, com comandos como expadd ou expreset
 
 
 ## Loggers
-- Announcing system for when a member joins or leaves
-- Logging system for edited profiles, edited messages, pinned messages, deleted messages and bulk deleted messages (!clear)
+- Sistema para anunciar quando um membro entra ou sai do servidor
+- Sitema de '*logar*' perfis editados, mensagens editadas, mensagens fixadas, mensagens apagadas por membros e mensagens apagadas usando !clear
 
 
-## Moderation
-- System for basic punishments (ban, kick, timeout) with their counterparts (unban, untimeout)
-- All punishments are stored in the database
-- System for managing the guild, with commands like clear, slowmode, (un)lock, (clear)history, for easier management
-- Warnings system with customisable duration (default 30 days) and punishments after 'x' number of warnings, all warnings are stored in the database
-- Auto moderation system, with flood/spam blocker, discord invites blocker and mass mention blocker
+## Moderação
+- Sistema para punições básicas (ban, kick, timeout) e seus comandos respectivos (unban, untimeout)
+- Todas as punições ficam salvas na database
+- Sistema para gerenciamento do servidor, com comandos como clear, slowmode, (un)lock, (clear)history, para gerenciamento mais facil
+- Advertências com durações personalizaveis (padrão 30 dias) e punições customizáveis após 'x' advertências, todas salvas na database
+- Sistema de moderação automática com bloqueador de flood/spam, convites de discord e menções em excesso
 
 
-## Music
-- Default, simple music bot with queue
-- Lyrics command (using Musixmatch API)
-- Replay command, inserting the current music to the end of the queue
-- DJ role for selected commands, like !clearqueue or !pause/!resume
+## Música
+- Bot simples e padrão de música no Discord
+- Comando lyrics para exibir a letra de uma música (usando API Musixmatch)
+- Comando replay, inserindo a música atual no fim da fila
+- Cargo DJ para comandos selecionados, como clearqueue ou pause/resume
 
 
-## Profiles
-- Profile system with title, birthday, nickname, aboutme, color, image and social media all in the database
-- Easily edit your profile using !edit
-- Reputation system using +rep, with set cooldown (default 1 per day), stored in the database
-- Birthday announcer (every day, set time) in a specific channel
-- Command to see the next 10 birthdays
+## Perfis
+- Sistema de perfis com titulo, aniversario, apelido, sobremim, cor, imagem e redes sociais, tudo salvo na database
+- Edite seu perfil facilmente usando !editar
+- Sistema de reputação usando !rep, com cooldown customizável (padrão 1 por dia), tudo salvo na database
+- Anunciador de aniversário (todo dia, num horário definido) em um canal customizável
+- Comando para exibir os próximos 10 aniversários
 
 
-## Utils
-- Various RNGs
-- Jankenpon with coins betting
-- Link shortener using TinyURL API
-- User and guild avatar/icon, banner and info 
-- Informations about the bot
-- Say command to announce this to the server, optional @everyone/@here
+## Úteis/Miscelânea
+- Vários '*RNGs*', (*lit. geradores aleatórios de número*)
+- Jankenpon com aposta de coins
+- Encurtador de URL usando a API do TinyURL
+- Avatar/ícone, banner e informações sobre um usuário ou o servidor 
+- Informações sobre o bot e seu criador
+- Comando say para anunciar para o servidor usando a conta do bot, @everyone/@here opcionais
