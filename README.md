@@ -3,31 +3,32 @@
 This is a Discord bot I started coding out of boredom, it only works for ONE server per token.  
 
 - [Commands](#commands)
-  * [Economy](#economy-)
-  * [Giveaways](#giveaways-)
-  * [Help](#help-)
-  * [Leveling](#leveling-)
-  * [Moderation](#moderation---all-commands-are-admin-commands-)
-  * [Music](#music-)
-  * [Profiles](#profiles-)
-  * [Roles](#roles-)
-  * [TempChannels](#tempchannels-)
-  * [Tickets](#tickets-)
-  * [Utils/Misc](#utilsmisc-)
+  * [Economy](#economy)
+  * [Giveaways](#giveaways)
+  * [Help](#help)
+  * [Leveling](#leveling)
+  * [Moderation](#moderation---all-commands-are-admin-commands)
+  * [Music](#music)
+  * [Profiles](#profiles)
+  * [Roles](#roles)
+  * [TempChannels](#tempchannels)
+  * [Tickets](#tickets)
+  * [Utils/Misc](#utilsmisc)
 - [Systems](#systems)
-  * [Announcers](#announcers-)
-  * [Economy](#economy--1)
-  * [Giveaways](#giveaways--1)
-  * [Help](#help--1)
-  * [Leveling](#leveling--1)
-  * [Loggers](#loggers-)
-  * [Moderation](#moderation-)
-  * [Music](#music--1)
-  * [Profiles](#profiles--1)
-  * [Roles](#roles--1)
-  * [TempChannels](#tempchannels--1)
-  * [Tickets](#tickets--1)
-  * [Utils/Misc](#utilsmisc--1)
+  * [Announcers](#announcers)
+  * [Economy](#economy-1)
+  * [Giveaways](#giveaways-1)
+  * [Help](#help-1)
+  * [Leveling](#leveling-1)
+  * [Loggers](#loggers)
+  * [Moderation](#moderation)
+  * [Music](#music-1)
+  * [Profiles](#profiles-1)
+  * [Roles](#roles-1)
+  * [TempChannels](#tempchannels-1)
+  * [Tickets](#tickets-1)
+  * [Utils/Misc](#utilsmisc-1)
+- [Configuration](#configuration)
 
 # Commands
 > Commands in italics need **Manager** role, **DJ** role for [music](#music) commands, or being the channel creator for non-admin [TempChannels](#tempchannels) commands.
@@ -264,3 +265,8 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - User and guild avatar/icon, banner, and info 
 - Information about the bot
 - Say command to announce this to the server, optional @everyone/@here
+
+---
+
+# Configuration
+> The configuration is stored in [config.json](/discordbot/config.json)
