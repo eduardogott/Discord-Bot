@@ -32,7 +32,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 # Commands
 > Commands in italics need **Manager** role, **DJ** role for [music](#music) commands, or being the channel creator for non-admin [TempChannels](#tempchannels) commands.
 
-## Economy
+## Economy ^
 
 - !daily - Claim daily bonus
 - !work - Work for 2 hours to get coins
