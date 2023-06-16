@@ -23,7 +23,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
   * [Loggers](#loggers-)
   * [Moderation](#moderation-)
   * [Music](#music--1)
-  * [Profiles](#profiles-1-)
+  * [Profiles](#profiles--1)
   * [Roles](#roles--1)
   * [TempChannels](#tempchannels--1)
   * [Tickets](#tickets--1)
