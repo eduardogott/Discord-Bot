@@ -13,7 +13,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
   * [Roles](#roles)
   * [TempChannels](#tempchannels)
   * [Tickets](#tickets)
-  * [Utils/Misc](#utils-misc)
+  * [Utils/Misc](#utils/misc)
 - [Systems](#systems)
   * [Announcers](#announcers)
   * [Economy](#economy-1)
@@ -27,7 +27,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
   * [Roles](#roles-1)
   * [TempChannels](#tempchannels-1)
   * [Tickets](#tickets-1)
-  * [Utils/Misc](#utils-misc-1)
+  * [Utils/Misc](#utils/misc-1)
 
 # Commands
 > Commands in italics need **Manager** role, **DJ** role for [music](#music) commands, or being the channel creator for non-admin [TempChannels](#tempchannels) commands.
