@@ -3,36 +3,36 @@
 This is a Discord bot I started coding out of boredom, it only works for ONE server per token.  
 
 - [Commands](#commands)
-  * [Economy](#economy)
-  * [Giveaways](#giveaways)
-  * [Help](#help)
-  * [Leveling](#leveling)
-  * [Moderation](#moderation---all-commands-are-admin-commands)
-  * [Music](#music)
-  * [Profiles](#profiles)
-  * [Roles](#roles)
-  * [TempChannels](#tempchannels)
-  * [Tickets](#tickets)
-  * [Utils/Misc](#utilsmisc)
+  * [Economy](#economy-)
+  * [Giveaways](#giveaways-)
+  * [Help](#help-)
+  * [Leveling](#leveling-)
+  * [Moderation](#moderation---all-commands-are-admin-commands-)
+  * [Music](#music-)
+  * [Profiles](#profiles-)
+  * [Roles](#roles-)
+  * [TempChannels](#tempchannels-)
+  * [Tickets](#tickets-)
+  * [Utils/Misc](#utilsmisc-)
 - [Systems](#systems)
-  * [Announcers](#announcers)
-  * [Economy](#economy-1)
-  * [Giveaways](#giveaways-1)
-  * [Help](#help-1)
-  * [Leveling](#leveling-1)
-  * [Loggers](#loggers)
-  * [Moderation](#moderation)
-  * [Music](#music-1)
-  * [Profiles](#profiles-1)
-  * [Roles](#roles-1)
-  * [TempChannels](#tempchannels-1)
-  * [Tickets](#tickets-1)
-  * [Utils/Misc](#utilsmisc-1)
+  * [Announcers](#announcers-)
+  * [Economy](#economy--1)
+  * [Giveaways](#giveaways--1)
+  * [Help](#help--1)
+  * [Leveling](#leveling--1)
+  * [Loggers](#loggers-)
+  * [Moderation](#moderation-)
+  * [Music](#music--1)
+  * [Profiles](#profiles-1-)
+  * [Roles](#roles--1)
+  * [TempChannels](#tempchannels--1)
+  * [Tickets](#tickets--1)
+  * [Utils/Misc](#utilsmisc--1)
 
 # Commands
 > Commands in italics need **Manager** role, **DJ** role for [music](#music) commands, or being the channel creator for non-admin [TempChannels](#tempchannels) commands.
 
-## Economy ^
+## Economy [^](#botdagaby)
 
 - !daily - Claim daily bonus
 - !work - Work for 2 hours to get coins
@@ -48,7 +48,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - *!clearinventory {player}* - Clears a player's inventory
 
 
-## Giveaways
+## Giveaways [^](#botdagaby)
 
 - *!gcreate* - Starts the giveaway creation
 - *!gdelete {id}* - Deletes a giveaway based on its message ID 
@@ -56,11 +56,11 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - *!gend {id}* - Ends a giveaway prematurely, based on its message ID
 
 
-## Help
+## Help [^](#botdagaby)
 - !help [eco|gw|level|mod|music|profile|roles|tc|tickets|info|misc] - Shows the respective help menu, if none is provided, shows the general help menu
 
 
-## Leveling
+## Leveling [^](#botdagaby)
 
 - !level {member} - Shows a member's EXP, if no member is mentioned, shows your EXP
 - !rank {member} - Shows a member's place on the leaderboard and info about their EXP, or yours if no member is mentioned
@@ -71,7 +71,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - *!resetexp {member}* - Resets a member's EXP
 
 
-## Moderation - ALL COMMANDS ARE ADMIN COMMANDS
+## Moderation - ALL COMMANDS ARE ADMIN COMMANDS [^](#botdagaby)
 
 - *!ban {member} [reason]* - Bans a member for an (optional) reason
 - *!unban {member_id}* - Unban a member from the guild
@@ -92,7 +92,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - *!unticketban {member}* - Unbans a player from opening tickets
 
 
-## Music
+## Music [^](#botdagaby)
 
 - !play {music} - Adds a music to the queue from a YouTube link or search
 - !skip - Skips the current music
@@ -105,7 +105,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - !replay - Adds the current music to the end of the queue
 
 
-## Profiles
+## Profiles [^](#botdagaby)
 
 - !edit (title/birthday/nickname/aboutme/color/image/socialmedia) {value} - Edits your profile
 - !profile {member} - Shows member's profile, if no member is mentioned, shows your profile
@@ -114,12 +114,12 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - *!adminedit {member} (title/birthday/nickname/aboutme/color/image/social) {value}* - Edits another member's profile
 
 
-## Roles
+## Roles [^](#botdagaby)
 
 - !register - Starts the user's registration
 
 
-## TempChannels
+## TempChannels [^](#botdagaby)
 
 - !tempchannel - Starts the creation of a TempChannel
 - *!tcdelete {id}* - Deletes a user's TempChannel
@@ -131,7 +131,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - *!tcatranscript {id}* - **ADMIN** - Creates a transcript of any TempChannel
 
 
-## Tickets
+## Tickets [^](#botdagaby)
 
 - !ticket - Creates a ticket
 - *!tclose* - Closes a ticket
@@ -143,7 +143,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - *!ttranscript* - Creates a transcript of the ticket
 
   
-## Utils/Misc
+## Utils/Misc [^](#botdagaby)
 
 - !random {min} {max} - Generates a random number between min-max
 - !dice {max} - Rolls a dice from the specified size
@@ -166,13 +166,13 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 ---
 
 # Systems
-## Announcers
+## Announcers [^](#botdagaby)
 
 - Twitch announcer for livestream on
 - YouTube announcer for new videos
 
 
-## Economy
+## Economy [^](#botdagaby)
 
 - Economy system with daily bonus, command !work each two hours, and money transferring, all stored in a json database
 - Shop/inventory system, where you spend your money from daily and work, all stored in the database
@@ -181,18 +181,18 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - Admin balance management, like giving or resetting a player's balance
 
 
-## Giveaways
+## Giveaways [^](#botdagaby)
 
 - Intuitive giveaway creation system, where you provide the channel it'll take part in, the end date, the number of winners, and the prize, one by one, stored in a database
 - System of ending giveaways prematurely, canceling giveaways, and rerolling the giveaway
 
 
-## Help
+## Help [^](#botdagaby)
 
 - Multiple help menus, divided by category, sent in a rich embed
 
 
-## Leveling
+## Leveling [^](#botdagaby)
 
 - Leveling system with listeners for messages and time spent in voice calls (default for awarding is each 5 minutes)
 - Bonus points for select roles, like booster or Twitch subscriber
@@ -200,13 +200,13 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - Admin EXP management, like giving or resetting a player's EXP
 
 
-## Loggers
+## Loggers [^](#botdagaby)
 
 - System for announcing when a member joins or leaves
 - Logging system for edited profiles, edited messages, pinned messages, deleted messages, and bulk deleted messages (!clear)
 
 
-## Moderation
+## Moderation [^](#botdagaby)
 
 - System for basic punishments (ban, kick, timeout) with their counterparts (unban, untimeout)
 - All punishments are stored in the database
@@ -216,7 +216,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - Ability to ban and unban players from creating [tickets](#tickets-1)
 
 
-## Music
+## Music [^](#botdagaby)
 
 - Default and simple music bot with queue
 - Lyrics command (using the Musixmatch API)
@@ -224,7 +224,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - DJ role for selected commands, like !clearqueue or !pause/!resume
 
 
-## Profiles
+## Profiles [^](#botdagaby)
 
 - Profile system with title, birthday, nickname, aboutme, color, image, and social media all in the database
 - Easily edit your profile using !edit
@@ -233,12 +233,12 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - Command to see the next 10 birthdays
 
 
-## Roles
+## Roles [^](#botdagaby)
 
 - Registration system with roles for age and gender, expandable
 
 
-## TempChannels
+## TempChannels [^](#botdagaby)
 
 - Creation of TempChannels, with a limit of one voice and one text chat per member, saved in the database
 - Interactive TempChannel creation with just a simple command
@@ -247,14 +247,14 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - TempChannels expire and get deleted after 7 days of inactivity
 
 
-## Tickets
+## Tickets [^](#botdagaby)
 
 - Simple creation of tickets, with a limit of two tickets per member, saved in the database
 - Ability to ban and unban players from creating tickets
 - Ability to add and remove members from the ticket, saved in the database
 - Ability to generate transcripts of the tickets
 
-## Utils/Misc
+## Utils/Misc [^](#botdagaby)
 
 - Various RNGs
 - Jankenpon with coins betting
