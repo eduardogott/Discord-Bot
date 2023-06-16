@@ -270,6 +270,7 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 
 # Configuration
 > The configuration is stored in [config.json](/discordbot/config.json)
+
 > Key in the JSON - Explanations - Limits, if needed *(to see limits further, go to [validator.py](/discordbot/validator.py))*
 
 - Announcers.Twitch.Username - The Twitch username that'll be used in the Twitch announcer - Twitch username (leave empty to disable)
