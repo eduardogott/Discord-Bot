@@ -1,6 +1,11 @@
 import discord
 from discord.ext import commands, tasks
 from youtube_search import YoutubeSearch
+import json
+
+with open('config.json') as f:
+    file = json.load(f)
+    config = file['Configuration']['Statistics']
 
 #! Missing Twitch followers!
 class Statistics(commands.Cog):
@@ -9,8 +14,8 @@ class Statistics(commands.Cog):
         self.update_statistics.start()
         self.guild_id = 1107127331119706224
         self.channel_names = ['Membros totais', 'Membros online', 'Cargos', 'Seguidores Twitch', 'Inscritos YouTube']
-        self.twitch_id = 666559696
-        self.youtube_id = 'UCGD_gX2JQ2-F3yjsKeNM0gA'
+        self.twitch_id = config['TwitchID']
+        self.youtube_id = config['YouTubeID']
 
     @tasks.loop(seconds=60)
     async def update_statistics(self):

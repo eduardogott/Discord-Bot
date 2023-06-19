@@ -32,7 +32,6 @@ class Music(commands.Cog):
                 else:
                     voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
 
-                    
                 if ctx.voice_client.channel != ctx.author.voice.channel:
                     await ctx.send('O bot está conectado em outro canal!', delete_after = 10)
 

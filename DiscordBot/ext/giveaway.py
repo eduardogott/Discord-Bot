@@ -145,6 +145,36 @@ class GiveawayCommands(commands.Cog):
 
         await gmessage.add_reaction('🎉')
         
+    @commands.command(aliases=['endsorteio'])
+    @commands.has_role('Giveaways')
+    async def gend(self, ctx, message_id: int = None):
+        if message_id is None:
+            await ctx.send('Você deve inserir um ID para encerrar o sorteio!')
+            return
+        
+        gw = ongoing_giveaways.get(GiveawayQuery.message_id == message_id)
+        ongoing_giveaways.remove(gw)
+
+        if gw is None:
+            await ctx.send('Sorteio não encontrado ou já encerrado!')
+            return
+
+        channel = self.bot.get_channel(gw['channel_id'])
+        message = await channel.fetch_message(gw['message_id'])
+
+        users = await message.reactions[0].users().flatten()
+        users.pop(users.index(self.user))
+        winner = rd.choice(users)
+
+        await message.reply('Sorteio encerrado adiantadamente!')
+        embed=discord.Embed(title="**SORTEIO ENCERRADO! :star2:**", color=0xff0000)
+        embed.add_field(name=f"**PARABÉNS {winner.mention}**!", value=f"**Você ganhou {gw['prize']}!**", inline=False)
+        embed.set_footer(text="*Abra ticket em até 24 horas para resgatar seu prêmio!*")
+        await channel.send(embed=embed)
+
+        gw['ended_prematurely'] = True
+        ended_giveaways.append(gw)
+
     @tasks.loop(seconds=30)
     async def check_giveaways(self):
         for i, giveaway in enumerate(ongoing_giveaways):
@@ -166,6 +196,5 @@ class GiveawayCommands(commands.Cog):
 
                 ended_giveaways.append(gw)
 
-        
 async def setup(bot):
     await bot.add_cog(GiveawayCommands(bot))

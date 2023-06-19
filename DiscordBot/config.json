@@ -1,0 +1,109 @@
+{
+    "Configuration": {
+        "Announcers": {
+            "Twitch": {
+                "Username": "gaby_ballejo",
+                "DiscordChannelID": 1107127331832725500
+            },
+            "YouTube": {
+                "YouTubeChannelID": "YOUR_YOUTUBE_CHANNEL_ID",
+                "DiscordChannelID": 1107127331832725500
+            }
+        },
+        "Economy": {
+            "StartBalance": 1,
+            "Multiplier": 1,
+            "WorkCooldown": 120,
+            "TransferTaxPercentage": 10
+        },
+        "Leveling": {
+            "Defaults": {
+                "StartEXP": 10,
+                "LevelUpRequirements": 1000
+            },
+            "Messages": {
+                "BaseEXP": 10,
+                "RoleBonusEXP": {
+                    "Sub": 5,
+                    "Booster": 5
+                }
+            },
+            "VoiceCalls": {
+                "CheckTime": 300,
+                "BaseEXP": 15,
+                "RoleBonusEXP": {
+                    "Sub": 5,
+                    "Booster": 5
+                }
+            }
+        },
+        "Loggers": {
+            "Announcers": {
+                "JoinChannel": 1107130520338436200,
+                "LeaveChannel": 1107130520338436200,
+                "LogChannel": 1109669039883681800
+            },
+            "Loggers": {
+                "LogChannel": 1109669039883681800,
+                "CmdLogChannel": 1109673549649686500
+            }
+        },
+        "Moderation": {
+            "General": {
+                "PunishmentsChannel": 1107130913948696600
+            },
+            "Warnings": {
+                "ExpirationTime": 30,
+                "AutoPunishments": {
+                    "2": "timeout %member% 7d Reached 2 warnings",
+                    "4": "timeout %member% 30d Reached 4 warnings",
+                    "6": "ban %member% Reached 6 warnings"
+                }
+            },
+            "AutoMod": {
+                "MinimumMessageSize": 10,
+                "FloodMessageAmount": 4,
+                "MaxMentions": 2
+            }
+        },
+        "Profiles": {
+            "Defaults": {
+                "Title": "User profile (!edit titulo)",
+                "Birthday": "31-02",
+                "Nickname": "Nickname (!edit apelido)",
+                "AboutMe": "Type `!edit sobremim` to edit this!",
+                "Color": "0xa80ca3",
+                "Image": "https://i.imgur.com/aaa.gif",
+                "Social": ""
+            },
+            "Edit": {
+                "SizeLimits": {
+                    "Title": [
+                        5,
+                        48
+                    ],
+                    "Nickname": [
+                        2,
+                        48
+                    ],
+                    "AboutMe": [
+                        5,
+                        128
+                    ]
+                }
+            }
+        },
+        "Roles": {
+            "AutoRole": {
+                "DefaultRole": "Membro"
+            }
+        },
+        "Statistics": {
+            "TwitchID": 666559696,
+            "YouTubeID": "UCGD_gX2JQ2-F3yjsKeNM0gA"
+        },
+        "Utils": {
+            "URLShortenerDelay": 60
+        }
+    }
+}

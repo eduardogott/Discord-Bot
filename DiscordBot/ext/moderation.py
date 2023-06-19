@@ -3,6 +3,11 @@ import datetime
 import re
 from tinydb import TinyDB, Query
 from discord.ext import commands, tasks
+import json
+
+with open('config.json') as f:
+    file = json.load(f)
+    config = file['Configuration']['Moderation']
 
 def time_convert(seconds, type):
     if type == 'min':
@@ -29,33 +34,55 @@ def time_input_convert(time_string):
         elif time_unit == 'd':
             return time_value * 86400
     return -1
-async def check_warnings(ctx, member):
-    player = punishments_table.get(PlayerQuery.id == member.id)
-    warnings = len(player['warnings'])
-    if warnings == 2:
-        length = datetime.datetime.now().astimezone() + datetime.timedelta(7)
-        reason = 'Atingiu 2 advertências'
+
+class WarningActions(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    async def process(self, ctx, args, member):
+        msg = args.split(' ')
+
+        if msg[0] == 'timeout' or msg[0] == 'mute':
+            member = msg[1].replace('%member%', member)
+            duration = msg[2]
+            reason = msg[3:]
+            self.timeout(ctx, member, duration, reason)
+            return
+        
+        if msg[0] == 'ban':
+            member = msg[1].replace('%member%', member)
+            reason = msg[2:]
+            self.ban(ctx, member, reason)
+            return
+        
+        if msg[0] == 'kick':
+            member = msg[1].replace('%member%', member)
+            reason = msg[2:]
+            self.kick(ctx, member, reason)
+            return
+
+    async def timeout(self, ctx, member, duration, *, reason):
+        length = datetime.datetime.now().astimezone() + datetime.timedelta(seconds=time_input_convert(duration))
         await member.timeout(length, reason = reason)
         await ctx.send(f'{member.mention} foi silenciado! Motivo: {reason}')
         player = punishments_table.get(PlayerQuery.id == member.id)
         player['user_punishments'].append({'type':'timeout','reason':reason,'time':datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),'length':length.strftime("%Y-%m-%d %H:%M:%S")})
         punishments_table.update(player, PlayerQuery.id == member.id)
         return
-    elif warnings == 4:
-        length = datetime.datetime.now().astimezone() + datetime.timedelta(28)
-        reason = 'Atingiu 4 advertências'
-        await member.timeout(length, reason = reason)
-        await ctx.send(f'{member.mention} foi silenciado! Motivo: {reason}')
-        player = punishments_table.get(PlayerQuery.id == member.id)
-        player['user_punishments'].append({'type':'timeout','reason':reason,'time':datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),'length':length.strftime("%Y-%m-%d %H:%M:%S")})
-        punishments_table.update(player, PlayerQuery.id == member.id)
-        return
-    elif warnings == 6:
-        reason = 'Atingiu 6 advertências'
+    
+    async def ban(self, ctx, member, *, reason):
         await member.ban(reason = reason)
         await ctx.send(f'{member.mention} foi banido! Motivo: {reason}')
         player = punishments_table.get(PlayerQuery.id == member.id)
         player['user_punishments'].append({'type':'ban','reason':reason,'time':datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),'removed':False})
+        punishments_table.update(player, PlayerQuery.id == member.id)
+        return
+    
+    async def kick(self, ctx, member, *, reason):
+        await member.kick(reason = reason)
+        await ctx.send(f'{member.mention} foi expulso! Motivo: {reason}')
+        player = punishments_table.get(PlayerQuery.id == member.id)
+        player['user_punishments'].append({'type':'kick','reason':reason,'time':datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),'removed':False})
         punishments_table.update(player, PlayerQuery.id == member.id)
         return
 
@@ -74,36 +101,92 @@ PlayerQuery = Query()
 class Punishments(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.channel = 1107130913948696626
+        self.channel = config['General']['PunishmentsChannel']
+
+    @commands.command()
+    @commands.has_permission(kick_members = True)
+    async def ticketban(self, ctx, member: discord.Member = None, *, reason = None):
+        if member is None:
+            await ctx.send('Você deve especificar um membro para ser banido dos tickets!', delete_after = 10)
+            return
+        
+        try:
+            player = punishments_table.get(PlayerQuery.id == member.id)
+            if player is None:
+                player = Player(member.id)
+                punishments_table.insert({'id': player.id, 'user_punishments': player.user_punishments, 'warnings': player.warnings})
+                player = punishments_table.get(PlayerQuery.id == member.id)
+
+            for punishment in player['user_punishments']:
+                if punishment['type'] == 'ticket-ban' and punishment['removed'] is False:
+                    await ctx.send('O membro já possui um ticket-ban ativo!')
+                    return
+
+            currtime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")    
+            player['user_punishments'].append({'type':'ticket-ban','reason':reason,'time':currtime,'removed':False,'author':ctx.author.id})
+            punishments_table.update(player, PlayerQuery.id == member.id)
+
+            await ctx.send(f'Baniu {member.mention} ({member.id}) de criar tickets!')
+
+        except Exception:
+            await ctx.send('Não foi possível banir dos tickets!')
+    
+    @commands.command()
+    @commands.has_permission(kick_members = True)
+    async def unticketban(self, ctx, member: discord.Member = None):
+        if member is None:
+            await ctx.send('Você deve especificar um membro para ser desbanido dos tickets!', delete_after = 10)
+            return
+        
+        try:
+            player = punishments_table.get(PlayerQuery.id == member.id)
+            if player is None:
+                await ctx.send('Este jogador não está banido de criar tickets!')
+   
+            for punishment in player['user_punishments']:
+                if punishment['type'] == 'ticket-ban' and punishment['removed'] == False:
+                    player['user_punishments'][punishment]['removed'] = True
+                    player['user_punishments'][punishment]['removed_by'] = ctx.author.id
+                    break
+            else:
+                await ctx.send('Este membro não está banido de criar tickets!')
+                return
+            
+            punishments_table.update(player, PlayerQuery.id == member.id)
+            await ctx.send(f'Desbaniu {member.mention} ({member.id}) de criar tickets!')
+        except Exception:
+            await ctx.send('Não foi possível banir dos tickets!')
 
     @commands.command()
     @commands.has_permissions(ban_members = True)
     async def ban(self, ctx, member : discord.Member = None, *, reason = None):
-        if member == None:
+        if member is None:
             await ctx.send('Você deve especificar um membro para ser banido!', delete_after = 10)
-        else:
-            try:
-                await member.ban(reason = reason)
+            return
+        
+        try:
+            await member.ban(reason = reason)
 
+            player = punishments_table.get(PlayerQuery.id == member.id)
+            if player is None:
+                player = Player(member.id)
+                punishments_table.insert({'id': player.id, 'user_punishments': player.user_punishments, 'warnings': player.warnings})
                 player = punishments_table.get(PlayerQuery.id == member.id)
-                if player is None:
-                    player = Player(member.id)
-                    punishments_table.insert({'id': player.id, 'user_punishments': player.user_punishments, 'warnings': player.warnings})
-                    player = punishments_table.get(PlayerQuery.id == member.id)
 
-                currtime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")    
-                player['user_punishments'].append({'type':'ban','reason':reason,'time':currtime,'removed':False,'author':ctx.author.id})
-                punishments_table.update(player, PlayerQuery.id == member.id)
+            currtime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")    
+            player['user_punishments'].append({'type':'ban','reason':reason,'time':currtime,'removed':False,'author':ctx.author.id})
+            punishments_table.update(player, PlayerQuery.id == member.id)
 
-                embed=discord.Embed(title=f"{member.display_name} foi banido!", color=0xff0000)
-                embed.add_field(name="Banido por", value=f"{ctx.author.display_name} ({ctx.author.id})", inline=False)
-                embed.add_field(name="Motivo", value=f"{reason}", inline=True)
-                embed.set_footer(text=f"ID do usuário: {member.id}")
-                channel = self.bot.get_channel(self.channel)
-                await channel.send(embed=embed)
-                await ctx.send(f'Baniu {member.mention} ({member.id})')
-            except Exception:
-                await ctx.send('Não foi possivel banir!')
+            embed=discord.Embed(title=f"{member.display_name} foi banido!", color=0xff0000)
+            embed.add_field(name="Banido por", value=f"{ctx.author.display_name} ({ctx.author.id})", inline=False)
+            embed.add_field(name="Motivo", value=f"{reason}", inline=True)
+            embed.set_footer(text=f"ID do usuário: {member.id}")
+            channel = self.bot.get_channel(self.channel)
+            await channel.send(embed=embed)
+            await ctx.send(f'Baniu {member.mention} ({member.id})')
+
+        except Exception:
+            await ctx.send('Não foi possivel banir!')
 
     @commands.command()
     @commands.has_permissions(kick_members = True)
@@ -307,7 +390,7 @@ class Warnings(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.check_warnings.start()
-        self.channel = 1107130913948696626
+        self.channel = config['General']['PunishmentsChannel']
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
@@ -323,7 +406,7 @@ class Warnings(commands.Cog):
             player = punishments_table.get(PlayerQuery.id == member.id)
 
         currtime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        exptime = (datetime.datetime.now() + datetime.timedelta(30)).strftime("%Y-%m-%d %H:%M:%S")
+        exptime = (datetime.datetime.now() + datetime.timedelta(config['Warnings']['ExpirationTime']/24)).strftime("%Y-%m-%d %H:%M:%S")
 
         player['warnings'].append({'reason':reason,'time':currtime,'expiration':exptime})
         punishments_table.update(player, PlayerQuery.id == member.id)
@@ -331,9 +414,13 @@ class Warnings(commands.Cog):
         player['user_punishments'].append({'type':'warn','reason':reason,'time':currtime,'removed':False,'author':ctx.author.id})
         punishments_table.update(player, PlayerQuery.id == member.id)
 
-        await check_warnings(ctx, member)
+        for key, value in config['Warnings']['AutoPunishments']:
+            if len(player['warnings']) == int(key):
+                await WarningActions.process(self, ctx, value, member)
+                break
+
         await ctx.send(f'Advertiu {member.mention}!')
-        embed=discord.Embed(title=f"{member.display_name} foi avertido!", color=0xff6600)
+        embed=discord.Embed(title=f"{member.display_name} foi advertido!", color=0xff6600)
         embed.add_field(name="Advertido por", value=f"{ctx.author.display_name} ({ctx.author.id})", inline=False)
         embed.add_field(name="Motivo", value=f"{reason}", inline=True)
         embed.set_footer(text=f"ID do usuário: {member.id}")
@@ -397,17 +484,30 @@ class AutoMod(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author == self.bot.user or message.content.startswith('!') or len(message.content) <= 10:
+        if message.author == self.bot.user or message.content.startswith('!') or len(message.content) < config['AutoMod']['MinimumMessageSize']:
+            return
+        
+        if 'cargo 2' in [role.name for role in message.author.roles]:
+            return
+        
+        if 'discord.gg' in message.content:
+            await message.delete()
+            await message.channel.send('Você não pode enviar convites aqui!')
             return
         
         time = datetime.datetime.now() - datetime.timedelta(hours=1)
         messages = len([msg.content async for msg in message.channel.history(limit=None, after=time) if msg.author == message.author and msg.content == message.content])
-        print(messages)
-        if messages >= 4:
+        if messages > config['AutoMod']['FloodMessageAmount']:
             await message.channel.send(f'Pare de flood! Você já mandou essa mensagem muitas vezes!')
+            return
+
+        if len(message.mentions) > config['AutoMod']['MaxMentions']:
+            await message.channel.send(f'Você mencionou muitos usuários!')
+            return
 
 async def setup(bot):
     await bot.add_cog(Punishments(bot))
     await bot.add_cog(Management(bot))
     await bot.add_cog(Warnings(bot))
     await bot.add_cog(AutoMod(bot))
+    await bot.add_cog(WarningActions(bot))

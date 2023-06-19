@@ -4,6 +4,11 @@ import json
 from discord.ext import commands, tasks
 from tinydb import TinyDB, Query
 
+#! Level roles in config.json
+with open('config.json') as f:
+    file = json.load(f)
+    config = file['Configuration']['Leveling']
+
 db = TinyDB('data.json', sort_keys=True, indent=2, separators=(',', ': '))
 levels_table = db.table('levels')
 
@@ -11,7 +16,7 @@ class Player:
     def __init__(self, player_id):
         self.id = player_id
         self.level = 1
-        self.xp = 10
+        self.xp = config['Defaults']['StartEXP']
 
 PlayerQuery = Query()
 
@@ -32,10 +37,11 @@ class LevelListener(commands.Cog):
             player = Player(message.author.id)
             levels_table.insert({'id': player.id, 'level': player.level, 'xp': player.xp})
         else:
-            player['xp'] += 10
-            player['xp'] += 5 if "Sub" in [role.name for role in message.author.roles] else 0
-            player['xp'] += 5 if "Booster" in [role.name for role in message.author.roles] else 0 
-            if player['xp'] >= player['level'] * 1000:
+            player['xp'] += config['Messages']['BaseEXP']
+            for role, value in config['Messages']['RoleBonusEXP']:
+                player['xp'] += value if role in [_role.name for _role in message.author.roles] else 0
+
+            if player['xp'] >= player['level'] * config['Defaults']['LevelUpRequirements']:
                 player['level'] += 1
                 await message.channel.send(f"{message.author.mention} subiu para o nível '**{player['level']}**!'")
             
@@ -46,18 +52,18 @@ class LevelListener(commands.Cog):
         for member, start_time in list(self.voice_start_times.items()):
             duration = datetime.now() - start_time
 
-            if duration >= timedelta(minutes=5):
+            if duration >= timedelta(minutes=config['VoiceCalls']['CheckTime']/60):
                 self.voice_start_times[member] = datetime.now()
                 player = levels_table.get(PlayerQuery.id == member.id)
                 if player is None:
                     player = Player(member.id)
                     levels_table.insert({'id': player.id, 'level': player.level, 'xp': player.xp})
                 else:
-                    player['xp'] += 15
-                    player['xp'] += 5 if "Sub" in [role.name for role in member.roles] else 0
-                    player['xp'] += 5 if "Booster" in [role.name for role in member.roles] else 0 
+                    player['xp'] += config['VoiceCalls']['BaseEXP']
+                    for role, value in config['Messages']['RoleBonusEXP']:
+                        player['xp'] += value if role in [_role.name for _role in member.roles] else 0
 
-                    if player['xp'] >= player['level'] * 1000:
+                    if player['xp'] >= player['level'] * config['Defaults']['LevelUpRequirements']:
                         player['level'] += 1
                         await member.send(f"{member.mention} subiu para o nível '**{player['level']}**!'")
 
@@ -124,6 +130,7 @@ class LevelCommands(commands.Cog):
 class LevelAdminCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.req = config['Defaults']['LevelUpRequirements']
 
     @commands.command(aliases=['setxp'])
     @commands.has_permissions(administrator=True)
@@ -138,7 +145,7 @@ class LevelAdminCommands(commands.Cog):
                 
                 old_player = player['xp']
                 player['xp'] = new_exp
-                player['level'] = new_exp // 1000 if new_exp >= 1000 else 1
+                player['level'] = new_exp // self.req if new_exp >= self.req else 1
                 
                 levels_table.update(player, PlayerQuery.id == player['id'])
                 await ctx.send(f'EXP de {member.display_name} alterado para {player["xp"]} (era {old_player})')
@@ -162,7 +169,7 @@ class LevelAdminCommands(commands.Cog):
                 old_player = player['xp']
 
                 player['xp'] += add_exp
-                player['level'] = player['xp'] // 1000 if player['xp'] >= 1000 else 1
+                player['level'] = player['xp'] // self.req if player['xp'] >= self.req else 1
 
                 levels_table.update(player, PlayerQuery.id == player['id'])
                 await ctx.send(f'EXP de {member.display_name} alterado para {player["xp"]} (era {old_player})')
@@ -193,7 +200,7 @@ class LevelAdminCommands(commands.Cog):
 
         old_player = player['xp']        
         player['xp'] -= remove_exp
-        player['level'] = player['xp'] // 1000 if player['xp'] >= 1000 else 1
+        player['level'] = player['xp'] // self.req if player['xp'] >= self.req else 1
 
         levels_table.update(player, PlayerQuery.id == player['id'])
         await ctx.send(f'EXP de {member.display_name} alterado para {player["xp"]} (era {old_player})')

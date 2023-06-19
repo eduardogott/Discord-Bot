@@ -3,12 +3,17 @@ import requests
 import json
 from discord.ext import commands, tasks
 
+with open('config.json') as f:
+    file = json.load(f)
+    twitch_config = file['Configuration']['Announcers']['Twitch']
+    youtube_config = file['Configuration']['Announcers']['YouTube']
+
 #* All working
 class Twitch(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.twitch_username = 'gaby_ballejo'
-        self.discord_chid = '1107127331832725567'
+        self.twitch_username = twitch_config['Username']
+        self.discord_chid = twitch_config['DiscordChannelID']
         self.twitch_api_url = f'https://api.twitch.tv/helix/streams?user_login={self.twitch_username}'
         self.is_stream_live = False
         self.twitch_client_id = '81p0b8zrd3cmnj4n7rg441q5zfn7ss'  
@@ -32,8 +37,8 @@ class Twitch(commands.Cog):
 '''class YouTube(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.youtube_channel_id = 'YOUR_YOUTUBE_CHANNEL_ID'
-        self.discord_channel_id = '1107127331832725567'
+        self.youtube_channel_id = youtube_config['YouTubeChannelID']
+        self.discord_channel_id = youtube_config['DiscordChannelID']
         self.youtube_api_url = f'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId={self.youtube_channel_id}&maxResults=1&order=date&type=video&key=YOUR_YOUTUBE_API_KEY'
         self.last_video_id = None
         self.check_youtube.start()

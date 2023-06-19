@@ -6,6 +6,14 @@ from tinydb import TinyDB, Query
 import random as rd
 import asyncio
 
+with open('config.json') as f:
+    file = json.load(f)
+    config = file['Configuration']['Economy']
+
+m = config['Multiplier']
+tax_percentage = (100-config['TransferTaxPercentage'])/100
+work_cooldown = config['WorkCooldown']/60
+
 consecutive_daily_bonus = {
     1:(100,200),
     2:(115,215),
@@ -25,24 +33,23 @@ item_list = {'item1':{'name':'item1','shortdesc':'Anim qui quis ullamco ea volup
                       'flags':['equipable'],'uses':-1,'actions':'giverole:Item2'},
              'item3':{'name':'item3','shortdesc':'Sint proident est esse officia amet culpa anim Lorem id ex.',
                       'flags':['consumable'],'uses':-1}}
-
 shop_items = [{'name':'item1','shortdesc':'Anim qui quis ullamco ea voluptate occaecat.',
                'longdesc':'''Magna eu culpa consequat nostrud esse. Officia consectetur excepteur amet ut nisi laborum
                 aute. Exercitation consectetur officia amet vel it excepteur. Cillum consequat consectetur fugiat eu
                 aliqua labore non sunt excepteur qui nisi sint. Veniam qui mollit mollit voluptate duis consectetur.''',
-                'price':1000,'flags':'i'},
+                'price':1000*m,'flags':'i'},
               {'name':'item2','shortdesc':'Veniam laboris amet mollit consectetur id elit veniam.',
                'longdesc':'''Anim ex magna elit cillum qui culpa. Ipsum magna aliqua ipsum laboris magna.
                 Laborum exercitation mollit aliqua exercitation. Duis pariatur aliqua esse excepteur sunt amet amet 
                 reprehenderit amet. Quis anim Lorem nostrud irure irure eu labore exercitation.''',
-                'price':2000,'flags':'e'},
+                'price':2000*m,'flags':'e'},
               {'name':'item3','shortdesc':'Sint proident est esse officia amet culpa anim Lorem id ex.',
                'longdesc':'''Velit voluptate magna ut amet aliqua. Voluptate labore officia adipisicing excepteur
                 laboris sit nulla in sint culpa elit esse aute. Cupidatat consectetur nisi ut laboris nisi.
                 Nulla cupidatat sunt est deserunt deserunt occaecat aute est. Non ex ea aute deserunt
                 proident ut id magna aliqua veniam ipsum. Ut consequat non ut et proident non excepteur 
                 commodo labore consectetur cupidatat ipsum elit anim.''',
-                'price':1500,'flags':'c'}]
+                'price':1500*m,'flags':'c'}]
 
 db = TinyDB('data.json', sort_keys=True, indent=2, separators=(',', ': '))
 economy_table = db.table('economy')
@@ -50,7 +57,7 @@ economy_table = db.table('economy')
 class Player:
     def __init__(self, player_id):
         self.id = player_id
-        self.balance = 1
+        self.balance = config['StartBalance']
         self.last_daily = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
         self.last_work_time = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
         self.consecutive_daily = 0
@@ -74,11 +81,11 @@ class EconomyCommands(commands.Cog):
         if datetime.datetime.now() - datetime.datetime.strptime(player["last_daily"], "%Y-%m-%d %H:%M:%S") > timedelta(days=1):
             player['consecutive_daily'] = min(player['consecutive_daily'], 10)
             coins = rd.randint(*consecutive_daily_bonus[player['consecutive_daily']])
-            player['balance'] += coins
+            player['balance'] += coins*m
             player['consecutive_daily'] += 1
             player['last_daily'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             economy_table.update(player, PlayerQuery.id == ctx.author.id)
-            await ctx.send(f"Você ganhou {coins} coins!")
+            await ctx.send(f"Você ganhou {coins*m} coins!")
         else:
             await ctx.send(f'Seu cooldown acaba em {((datetime.datetime.strptime(player["last_daily"], "%Y-%m-%d %H:%M:%S"))-datetime.datetime.now()).strftime("%H:%M:%S")}')
 
@@ -90,12 +97,12 @@ class EconomyCommands(commands.Cog):
             economy_table.insert({'id': player.id, 'balance': player.balance, 'last_daily': player.last_daily, 'last_work_time': player.last_work_time, 'consecutive_daily': player.consecutive_daily, 'inventory': player.inventory})
             player = economy_table.get(PlayerQuery.id == ctx.author.id)
 
-        if datetime.datetime.now() - datetime.datetime.strptime(player["last_work_time"], "%Y-%m-%d %H:%M:%S") > timedelta(hours=2):
+        if datetime.datetime.now() - datetime.datetime.strptime(player["last_work_time"], "%Y-%m-%d %H:%M:%S") > timedelta(hours=work_cooldown):
             coins = rd.randint(100, 200)
-            player['balance'] += coins
+            player['balance'] += coins*m
             player['last_work_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             economy_table.update(player, PlayerQuery.id == ctx.author.id)
-            await ctx.send(f"Você ganhou {coins} coins! Volte em 2 horas para ganhar mais.")
+            await ctx.send(f"Você ganhou {coins*m} coins! Volte em 2 horas para ganhar mais.")
         else:
             await ctx.send(f'Seu cooldown acaba em {((datetime.datetime.strptime(player["last_work_time"], "%Y-%m-%d %H:%M:%S"))-datetime.datetime.now()).strftime("%H:%M:%S")}')
 
@@ -132,7 +139,7 @@ class EconomyCommands(commands.Cog):
             return
         
         from_player["balance"] -= value
-        to_player["balance"] += value
+        to_player["balance"] += value*tax_percentage
         economy_table.update(from_player, PlayerQuery.id == ctx.author.id)
         economy_table.update(to_player, PlayerQuery.id == member.id)
         await ctx.send(f'Você enviou {value} coins para {member.display_name}!')
@@ -295,7 +302,7 @@ class ItemCommands(commands.Cog):
         economy_table.update(player, PlayerQuery.id == ctx.author.id)
 
 #? All optimised
-class EconomyAdminCommands(commands.Cog):  
+class EconomyAdminCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -344,7 +351,6 @@ class EconomyAdminCommands(commands.Cog):
         else:
             await ctx.send('Argumento inválido, insira !eco (give/take/set/remove) \{@membro\} \{valor\}', delete_after = 15)
     
-    #!Corrigir giveitem e takeitem
     @commands.command()
     @commands.has_role('Manager')
     async def giveitem(self, ctx, member: discord.Member = None, item = None):

@@ -2,14 +2,19 @@ import discord
 from discord.ext import commands
 import os
 import asyncio
+import json
+
+with open('config.json') as f:
+    file = json.load(f)
+    config = file['Configuration']['Loggers']
 
 #? All optimised!
 class Announcers(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.join_channel = 1107130520338436198
-        self.leave_channel = 1107130520338436198
-        self.logging_channel = 1109669039883681813
+        self.join_channel = config['Announcers']['JoinChannel']
+        self.leave_channel = config['Announcers']['LeaveChannel']
+        self.logging_channel = config['Announcers']['LogChannel']
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -27,7 +32,7 @@ class Announcers(commands.Cog):
         logchannel.send(f'{member.id} | {member.name}#{member.discriminator} entrou no servidor!')
         
     @commands.Cog.listener()
-    async def on_member_remove(self, member):
+    async def on_member_remove(self, member): #turn this into member remove raw
         leavechannel = self.bot.get_channel(self.leave_channel)
         logchannel = self.bot.get_channel(self.logging_channel)
         await leavechannel.send(f'Adeus {member.name}#{member.discriminator}.')
@@ -37,8 +42,8 @@ class Announcers(commands.Cog):
 class Loggers(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.logging_channel = 1109669039883681813
-        self.cmdlogging_channel = 1109673549649686548
+        self.logging_channel = config['Loggers']['LogChannel']
+        self.cmdlogging_channel = config['Loggers']['CmdLogChannel']
          
     @commands.Cog.listener()
     async def on_member_update(self, before, after):

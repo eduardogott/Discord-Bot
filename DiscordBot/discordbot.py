@@ -1,5 +1,30 @@
+
+# TODO: LEVEL ROLES
+# TODO Weather using wttr.in
+# TODO Quizzes and games
+# TODO Translate
+# TODO config.json for tickets and tempchannels
+
+# FIXME Role names in permissions
+# FIXME Add Wikipedia to utils.py 
+
+# TODO Twitch-Discord verification/linking
+# TODO Error handling
+# TODO Lyrics in music.py
+# TODO !punir with default reasons and lengths
+# TODO Scheduled messages
+# TODO twitch statistics in statistics.py
+# TODO Embed sender
+# TODO Call recording
+# TODO Search pokedex, twitch, youtube, twitter, reddit
+
+# TODO Twitch bot
+
 import discord
 from discord.ext import commands
+from validator import config_validator
+
+config_validator()
 
 intents = discord.Intents.all()
 intents.message_content = True
@@ -18,7 +43,7 @@ class BotClient(commands.Bot):
         await bot.load_extension('ext.announcers')
         await bot.load_extension('ext.leveling')
         await bot.load_extension('ext.profiles')
-        #await bot.load_extension('ext.roles')
+        await bot.load_extension('ext.roles')
         await bot.load_extension('ext.economy')
 
     async def on_ready(self):
@@ -28,12 +53,9 @@ class BotClient(commands.Bot):
 
 
     async def on_message(self, message):
-        if 'discord.gg' in message.content:
-            if 'cargo 2' not in [role.name for role in message.author.roles]:
-                await message.delete()
 
         await bot.process_commands(message)
     
 
 bot = BotClient()
-bot.run('Hidden for obvious reasons')
+bot.run('MTEwNzM2MTM4MzEwMTc2Nzc3Mg.GZX_Kw.A1dx4TLR3oqgnAZf5pdcuOLU1UbncsoiPX_4xc')

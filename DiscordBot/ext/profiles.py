@@ -5,6 +5,12 @@ import re
 import datetime
 import operator
 import heapq
+import json
+
+with open('config.json') as f:
+    file = json.load(f)
+    defaults = file['Configuration']['Profiles']['Defaults']
+    edit_config = file['Configuration']['Profiles']['Edit']['SizeLimits']
 
 meses = {'01': 'janeiro',
          '02': 'fevereiro',
@@ -25,13 +31,15 @@ profiles_table = db.table('profiles')
 class Player():
     def __init__(self, player_id):
         self.id = player_id
-        self.title = 'Perfil do usuário (!editar titulo)'
-        self.birthday = '31-02'
-        self.nickname = 'Apelido (!editar apelido)'
-        self.aboutme = 'Digite `!editar sobremim` para editar esta parte!'
-        self.color = '0xa80ca3'
-        self.image = ''
+        self.title = defaults['Title']
+        self.birthday = defaults['Birthday']
+        self.nickname = defaults['Nickname']
+        self.aboutme = defaults['AboutMe']
+        self.color = defaults['Color']
+        self.image = defaults['Image']
+        self.social = defaults['Social']
         self.reps = 0
+        self.registered = False
 
 PlayerQuery = Query()
 
@@ -47,11 +55,11 @@ class ProfileEdit(commands.Cog):
 
     @commands.command(aliases=['editar', 'editprofile', 'editperfil'])
     async def edit(self, ctx, key: str = None, *, value = None):
-        valid_keys = {'titulo': ('O título deve ter entre 5 e 48 caracteres!', (5, 48), 'title'),
+        valid_keys = {'titulo': ('O título deve ter entre 5 e 48 caracteres!', (edit_config['Title'][0], edit_config['Title'][1]), 'title'),
                       'aniversario': ('O aniversário deve estar no formato `dd-mm`. Ex: `05-04` é 05 de abril.', self.birthday_pattern, 'birthday'),
-                      'apelido': ('O apelido deve ter entre 2 e 48 caracteres!', (2, 48), 'nickname'),
-                      'sobremim': ('O "sobre" deve ter entre 5 e 128 caracteres!', (5, 128), 'aboutme'),
-                      'cor': ('Você deve colocar uma cor no formato hex! (#ffffff)', self.color_pattern, 'color'),
+                      'apelido': ('O apelido deve ter entre 2 e 48 caracteres!', (edit_config['Nickname'][0], edit_config['Nickname'][1]), 'nickname'),
+                      'sobremim': ('O "sobre" deve ter entre 5 e 128 caracteres!', (edit_config['AboutMe'][0], edit_config['AboutMe'][1]), 'aboutme'),
+                      'cor': ('Você deve colocar uma cor no formato hexe e em minúsculo! (#ffffff)', self.color_pattern, 'color'),
                       'imagem': ('A imagem deve estar no imgur, e com a URL `i.imgur.com/`', (self.social_pattern, self.social_url_pattern), 'image'),
                       'social': ('Insira sua rede social no formato `rede;url`. Ex: `twitter;https://twitter.com/eduardogottert`', (self.social_pattern, self.social_url_pattern), 'social')}
         
@@ -61,7 +69,7 @@ class ProfileEdit(commands.Cog):
                 player = profiles_table.get(PlayerQuery.id == ctx.author.id)
                 if player is None:
                     player = Player(ctx.author.id)
-                    profiles_table.insert({'id': player.id, 'title': player.title, 'birthday': player.birthday, 'nickname': player.nickname, 'aboutme': player.aboutme, 'color': player.color, 'image': player.image, 'reps': player.reps})
+                    profiles_table.insert({'id': player.id, 'title': player.title, 'birthday': player.birthday, 'nickname': player.nickname, 'aboutme': player.aboutme, 'color': player.color, 'image': player.image, 'reps': player.reps, 'registered': player.registered})
                     player = profiles_table.get(PlayerQuery.id == ctx.author.id)
 
                 if key in ['titulo', 'apelido', 'sobremim']:
@@ -116,7 +124,7 @@ class ProfileCommands(commands.Cog):
         player = profiles_table.get(PlayerQuery.id == ctx.author.id)
         if player is None:
             player = Player(ctx.author.id)
-            profiles_table.insert({'id': player.id, 'title': player.title, 'birthday': player.birthday, 'nickname': player.nickname, 'aboutme': player.aboutme, 'color': player.color, 'image': player.image, 'reps': player.reps})
+            profiles_table.insert({'id': player.id, 'title': player.title, 'birthday': player.birthday, 'nickname': player.nickname, 'aboutme': player.aboutme, 'color': player.color, 'image': player.image, 'reps': player.reps, 'registered': player.registered})
             player = profiles_table.get(PlayerQuery.id == ctx.author.id)
             return
         
@@ -136,7 +144,7 @@ class ProfileCommands(commands.Cog):
         player = profiles_table.get(PlayerQuery.id == member.id)
         if player is None:
             player = Player(member.id)
-            profiles_table.insert({'id': player.id, 'title': player.title, 'birthday': player.birthday, 'nickname': player.nickname, 'aboutme': player.aboutme, 'color': player.color, 'image': player.image, 'reps': player.reps})
+            profiles_table.insert({'id': player.id, 'title': player.title, 'birthday': player.birthday, 'nickname': player.nickname, 'aboutme': player.aboutme, 'color': player.color, 'image': player.image, 'reps': player.reps, 'registered': player.registered})
             player = profiles_table.get(PlayerQuery.id == member.id)
         
         player['reps'] += 1
@@ -189,6 +197,57 @@ class BirthdayAnnouncer(commands.Cog):
         
         embed = discord.Embed(title='Próximos 10 aniversários', description=birthday_message, color=0xc514b6)
         await ctx.send(embed=embed)
+
+#? All optimised!
+class AdminProfileEdit(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.birthday_pattern = r'\b^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])$\b'
+        self.color_pattern = r'^\#[0-9a-f]{6}$'
+        self.image_pattern = r'^\bhttps?:\/\/i\.imgur\.com\/[a-zA-Z0-9]+\.(?:jpg|jpeg|png|gif|bmp)$\b'
+        self.social_pattern = r'^(?i)(?:twitter|youtube|reddit|tiktok|instagram|github|facebook|twitch)$'
+        self.social_url_pattern = r'^(?i)https?\:\/\/(?:twitter|youtube|reddit|tiktok|instagram|github|facebook|twitch)\.com(\.br)?\/[.]$'
+
+    @commands.command(aliases=['editar', 'editprofile', 'editperfil'])
+    @commands.has_role('Manager')
+    async def adminedit(self, ctx, member: discord.Member = None, key: str = None, *, value = None):
+        if member is None:
+            await ctx.send('Você deve inserir um membro. Ex: !adminedit @Edu titulo TituloExemplo')
+        valid_keys = {'titulo': ('O título deve ter entre 5 e 48 caracteres!', (edit_config['Title'][0], edit_config['Title'][1]), 'title'),
+                      'aniversario': ('O aniversário deve estar no formato `dd-mm`. Ex: `05-04` é 05 de abril.', self.birthday_pattern, 'birthday'),
+                      'apelido': ('O apelido deve ter entre 2 e 48 caracteres!', (edit_config['Nickname'][0], edit_config['Nickname'][1]), 'nickname'),
+                      'sobremim': ('O "sobre" deve ter entre 5 e 128 caracteres!', (edit_config['AboutMe'][0], edit_config['AboutMe'][1]), 'aboutme'),
+                      'cor': ('Você deve colocar uma cor no formato hex e em minúsculo! (#ffffff)', self.color_pattern, 'color'),
+                      'imagem': ('A imagem deve estar no imgur, e com a URL `i.imgur.com/`', (self.social_pattern, self.social_url_pattern), 'image'),
+                      'social': ('Insira sua rede social no formato `rede;url`. Ex: `twitter;https://twitter.com/eduardogottert`', (self.social_pattern, self.social_url_pattern), 'social')}
+        
+        if key in valid_keys:
+            error_message, limits, db_entry = valid_keys[key]
+            if value is not None:
+                player = profiles_table.get(PlayerQuery.id == member.id)
+                if player is None:
+                    player = Player(ctx.author.id)
+                    profiles_table.insert({'id': player.id, 'title': player.title, 'birthday': player.birthday, 'nickname': player.nickname, 'aboutme': player.aboutme, 'color': player.color, 'image': player.image, 'reps': player.reps, 'registered': player.registered})
+                    player = profiles_table.get(PlayerQuery.id == member.id)
+
+                if key in ['titulo', 'apelido', 'sobremim']:
+                    if limits[0] <= len(value) <= limits[1]:
+                        player[db_entry] = value
+                        profiles_table.update(player, PlayerQuery.id == player['id'])
+                    else:
+                        await ctx.send(f'{error_message}')
+
+                elif key in ['aniversario', 'cor', 'imagem']:
+                    if re.match(limits, value):
+                        player[db_entry] = value
+                        profiles_table.update(player, PlayerQuery.id == player['id'])
+                    else:
+                        await ctx.send(f'{error_message}')
+                        
+            else:
+                await ctx.send('Você deve inserir um valor! (Ex: !editar \{titulo\} \{Perfil do Hyper\})')
+        else:
+            await ctx.send('Opções: `titulo, aniversario, apelido, sobremim, cor, imagem, social`')          
 
 async def setup(bot):
     await bot.add_cog(ProfileEdit(bot))
