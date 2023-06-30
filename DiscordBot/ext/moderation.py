@@ -313,13 +313,23 @@ class Management(commands.Cog):
         
     @commands.command(aliases=['purge','clean','limpar'])
     @commands.has_permissions(manage_messages=True)
-    async def clear(self, ctx, amount: int = 10):
+    async def clear(self, ctx, amount: int = 10, user = None):
+        if user in ['self', 'bot', 'client']:
+            user == self.bot.user
+        
+        if user is None:
+            try:
+                await ctx.channel.purge(limit=amount)
+                await ctx.send(f'Apagou {amount} mensagens.', delete_after=5)
+            except Exception: 
+                await ctx.send('Insira um número válido.', delete_after=5)
+            return
+
         try:
-            await ctx.channel.purge(limit=amount)
-            await ctx.send(f'Apagou {amount} mensagens.', delete_after=5)
-        except Exception: 
-            await ctx.send('Insira um número válido.', delete_after=5)            
-            
+            await ctx.channel.purge(limit=amount, check = lambda m: m.author == user)
+        except Exception:
+            await ctx.send('Insira um número e um membro válido.', delete_after=10)
+
     @commands.command(aliases=['delay', 'cooldown'])
     @commands.has_permissions(manage_channels=True)
     async def slowmode(ctx, time: int = None):

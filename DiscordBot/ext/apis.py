@@ -5,8 +5,7 @@ from all_apis import Countries as _countries
 from sys import stdout
 import nasapy
 import datetime
-
-print(a)
+ 
 countries = _countries.RestCountryApiV31
 stdout.reconfigure(encoding='utf-8')
 
@@ -66,8 +65,6 @@ class NasaAPI(commands.Cog):
             embed.set_footer(text=f'NASA APOD do dia {picture["date"]}. Clique aqui para assistir!')
             embed.url = picture['url']
         await ctx.send(embed=embed)
-
-    @commands.command(aliases=[''])
     
 async def setup(bot):
     await bot.add_cog(CountriesAPI(bot))

@@ -4,6 +4,14 @@ import wikipedia as wp
 from discord.ext import commands, tasks
 import ast
 import requests
+import re
+from tinydb import TinyDB, Query
+import datetime
+import json
+
+with open('config.json') as f:
+    file = json.load(f)
+    config = file['Configuration']['Utils']
 
 meses = {1: 'janeiro',
          2: 'fevereiro',
@@ -17,14 +25,51 @@ meses = {1: 'janeiro',
          10: 'outubro',
          11: 'novembro',
          12: 'dezembro'}
-choice_emojis = {'papel':':newspaper:',
-                 'pedra':':rock:',
-                 'tesoura':':scissors:'}
+
+def time_convert(seconds, type = None):
+    if type == 'min':
+        seconds *= 60
+    days = seconds // 86400
+    seconds %= 86400
+    hours = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    return '{}{}h {}m'.format(str(days) + 'd ' if days > 0 else '', 
+                              str(hours) if hours > 0 else '',
+                              str(minutes) if minutes > 0 else '')
+def time_input_convert(time_string):
+    match = re.match(r'(\d+)\s*(s|m|h|d)', time_string)
+    if match:
+        time_value, time_unit = match.groups()
+        time_value = int(time_value)
+        if time_unit == 's':
+            return time_value
+        elif time_unit == 'm':
+            return time_value * 60
+        elif time_unit == 'h':
+            return time_value * 3600
+        elif time_unit == 'd':
+            return time_value * 86400
+    return -1
+
+db = TinyDB('data.json', sort_keys=True, indent=2, separators=(',', ': '))
+reminders_table = db.table('reminders')
+
+class Reminder():
+    def __init__(self, player_id, time, channel_id, text):
+        self.id = player_id
+        self.time = time
+        self.channel_id = channel_id
+        self.reminder = text
+
+ReminderQuery = Query()
 
 #* All working!
 class RNGs(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.choice_emojis = {'papel':':newspaper:','pedra':':rock:','tesoura':':scissors:'}
+
         wp.set_lang('pt')
         
     @commands.command()
@@ -68,7 +113,7 @@ class RNGs(commands.Cog):
         else:
             result = 'Eu ganhei!'
 
-        await ctx.send(f'Eu escolho {bot_choice} {choice_emojis[bot_choice]}! {result}')
+        await ctx.send(f'Eu escolho {bot_choice} {self.choice_emojis[bot_choice]}! {result}')
                 
     @commands.command(aliases=['choice'])
     async def escolher(self, ctx, *args):
@@ -78,14 +123,15 @@ class RNGs(commands.Cog):
             x = rd.choice(args)
             await ctx.send(f'Eu escolho {x}!')
 
-#* All working!
+#? All optimised!
 class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.tinyurl_api = 'https://tinyurl.com/api-create.php?url='
+        self.check_reminders.start()
 
     @commands.command(aliases=['short', 'shorturl', 'bitly', 'tinyurl'])
-    @commands.cooldown(1, 60, commands.BucketType.user)
+    @commands.cooldown(1, config['URLShortenerDelay'], commands.BucketType.user)
     async def shorten(self, ctx, url: str = None):
         if url is None:
             await ctx.send('Você não forneceu uma URL para encurtar!', delete_after = 10)
@@ -101,11 +147,61 @@ class Utils(commands.Cog):
         except (requests.exceptions.HTTPError, requests.exceptions.RequestException):
             await ctx.send(f'Não foi possível encurtar a URL `{url}`.')
 
+    @shorten.error
+    async def shorten_error(ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            remaining = round(error.retry_after)
+            await ctx.send(f'Este comando está em cooldown! Aguarde {time_convert(remaining)} e tente novamente!')
+
+    @commands.command(aliases=['lembrete','reminder'])
+    async def remindme(self, ctx, time = None, text = None):
+        if time is None or text is None:
+            await ctx.send('Você deve inserir um tempo (s/m/h/d) e um lembrete! Ex: !remindme 7d MotivoExemplo')
+            return
+        
+        time = time_input_convert(time)
+        if time == -1:
+            await ctx.send('Você inseriu um tempo inválido! Deve ser no formato [número](s/m/h/d), ex: 30m, 12h, 7d.')
+            return
+        
+        db_time = (datetime.datetime.now() + datetime.timedelta(seconds=time)).strftime("%Y-%m-%d %H:%M:%S")
+        reminder = Reminder(ctx.author.id, db_time, ctx.channel.id, text)
+
+        reminders_table.insert({'id':reminder.id,'time':reminder.time,'channel_id':reminder.channel_id,'reminder':reminder.reminder})
+        await ctx.send('Lembrete criado com sucesso!')
+
+    @commands.command(aliases=['votacao'])
+    @commands.has_role('cargo 2')
+    async def poll(self, ctx, question = None):
+        if question is None:
+            await ctx.send('Você deve colocar uma pergunta de sim ou não! Ex: !poll \{Grêmio é maior que Inter?\}')
+            return
+        
+        embed = discord.Embed(title=f'{question}', description='Reaja abaixo com :white_check_mark: SIM ou :no_entry: NÃO')
+        embed.set_footer(text=f'Votação criada por {ctx.author.display_name}')
+        message = await ctx.send(embed=embed)
+        message.add_reaction('✅')
+        message.add_reaction('  ')
+    
+    @tasks.loop(seconds=60)
+    async def check_reminders(self):
+        for i, reminder in enumerate(reminders_table):
+            if reminder['time'].strptime("%Y-%m-%d %H:%M:%S") > datetime.datetime.now():
+                reminder = reminders_table.pop(i)
+                channel = self.bot.get_channel(reminder['channel_id'])
+                user = self.bot.get_user(reminder['id'])
+                if user is not None:
+                    await channel.send(f'Lembrete para {user.mention}!\n{reminder["reminder"]}')
+
 #* All working! (Just missing avatar in !sobre)
 class Informations(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.creator_id = 710164157235855491
+
+    @commands.command()
+    async def ping(self, ctx):
+        await ctx.send(f'Pong! {round(self.bot.latency, 0)}ms')
 
     @commands.command(aliases=['useravatar'])
     async def avatar(self, ctx, *, member: discord.Member = None):
@@ -192,6 +288,7 @@ class Informations(commands.Cog):
         #embed.set_thumbnail(url="http")
         embed.add_field(name="Minha Twitch!", value="https://twitch.tv/gaby_ballejo", inline=False)
         embed.add_field(name="Criado por", value=f"https://github.com/eduardogott\nDC: {creator_user.name}#{creator_user.discriminator}", inline=False)
+        embed.add_field(name="Latência", value=f"{round(self.bot.latency, 0)}ms")
         embed.add_field(name="Para mais informações", value="Digite `!help`", inline=False)
         await ctx.send(embed=embed)
 
@@ -224,41 +321,8 @@ class Say(commands.Cog):
         else:
             await ctx.send(f'{msg} ||@here||')
 
-#! Everything missing
-'''class TempChannel(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.temp_voice = []
-        self.temp_text = []
-        self.check_channels.start()
-
-    @tasks.loop(minutes=5)
-    async def check_channels(self):
-        for channel in self.temp_voice:
-            pass
-
-    @commands.command()
-    async def tempchannel(self, ctx, type: str = None):
-        if type in ['voice', 'voz', 'v']:
-            if ctx.author.id not in [item[1] for item in self.temp_voice]:
-                vchannel = await ctx.guild.create_voice_channel(ctx.author.display_name, category='Temporários Voz')
-                self.temp_voice.append([vchannel, ctx.author.id])
-            else:
-                channel = self.bot.get_channel([item[0] for item in self.temp_voice if item[1] == ctx.author.id][0])
-                await ctx.send(f'Você já tem um canal de voz temporário! {channel.mention}')
-        elif type in ['text', 'texto', 't']:
-            if ctx.author.id not in [item[1] for item in self.temp_text]:
-                tchannel = await ctx.guild.create_text_channel(ctx.author.display_name, category='Temporários Texto')
-                self.temp_text.append([tchannel, ctx.author.id])
-            else:
-                channel = self.bot.get_channel([item[0] for item in self.temp_text if item[1] == ctx.author.id][0])
-                await ctx.send(f'Você já tem um canal de texto temporário! {channel.mention}')
-        else:
-            await ctx.send('Você deve criar um canal usando !tempchannel \{voz|texto\}')'''
-
 async def setup(bot):
     await bot.add_cog(RNGs(bot))
     await bot.add_cog(Utils(bot))
     await bot.add_cog(Informations(bot))
     await bot.add_cog(Say(bot))
-    #await bot.add_cog(TempChannel(bot))

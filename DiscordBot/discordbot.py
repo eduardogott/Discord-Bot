@@ -32,7 +32,8 @@ intents.members = True
 
 class BotClient(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix=commands.when_mentioned_or('!'), intents=intents, help_command=None)
+        super().__init__(command_prefix=commands.when_mentioned_or('!', '.'), case_insensitive = True,
+                         strip_after_prefix = True, intents=intents, help_command=None)
 
     async def setup_hook(self):
         await bot.load_extension('ext.moderation')
@@ -49,11 +50,10 @@ class BotClient(commands.Bot):
     async def on_ready(self):
         await bot.change_presence(status=discord.Status.online, activity = discord.Game(name=f'Digite !help para ver a lista de comandos!'))
         print(f'Bot ready as {self.user}')
-        print(f'Bot loaded in {[guild.name for guild in self.guilds]}')
+        print(f'Bot loaded in {", ".join([guild.name for guild in self.guilds])}')
 
 
     async def on_message(self, message):
-
         await bot.process_commands(message)
     
 
