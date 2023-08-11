@@ -58,4 +58,4 @@ class BotClient(commands.Bot):
     
 
 bot = BotClient()
-bot.run('MTEwNzM2MTM4MzEwMTc2Nzc3Mg.GZX_Kw.A1dx4TLR3oqgnAZf5pdcuOLU1UbncsoiPX_4xc')
+bot.run(TOKEN)
