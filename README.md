@@ -1,4 +1,4 @@
-# BotDaGaby
+# Hyper's Discord Bot
 
 This is a Discord bot I started coding out of boredom, it only works for ONE server per token.  
 
