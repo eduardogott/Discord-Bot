@@ -1,4 +1,4 @@
-# BotDaGaby
+# HyperBot
 
 Este é um bot de Discord que eu criei quando tava no tédio, só funciona para UM servidor por token.
 
