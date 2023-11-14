@@ -1,0 +1,52 @@
+{
+  "levels": {
+    "2": {
+      "id": 710164157235855491,
+      "level": 3,
+      "xp": 2550
+    },
+    "3": {
+      "id": 544952100526882847,
+      "level": 1,
+      "xp": 40
+    }
+  },
+  "profiles": {
+    "1": {
+      "aboutme": "Pobreta",
+      "birthday": "05-04",
+      "color": "0xff0000",
+      "id": 710164157235855491,
+      "image": "https://i.imgur.com/OBMQVkm.png",
+      "nickname": "! Edu",
+      "reps": 0,
+      "title": "Sou foda"
+    },
+    "2": {
+      "aboutme": "Digite `!editar sobremim` para editar esta parte!",
+      "birthday": "31-02",
+      "color": "0xa80ca3",
+      "id": 544952100526882847,
+      "image": "",
+      "nickname": "Apelido (!editar apelido)",
+      "reps": 2,
+      "title": "Podrasso"
+    }
+  },
+  "punishments": {
+    "1": {
+      "id": 544952100526882847,
+      "user_punishments": [
+        {
+          "author": 710164157235855491,
+          "reason": null,
+          "removed": true,
+          "removed_by": 710164157235855491,
+          "time": "2023-05-21 20:53:52",
+          "type": "warn"
+        }
+      ],
+      "warnings": []
+    }
+  }
+}
