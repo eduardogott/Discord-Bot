@@ -1,6 +1,11 @@
 # Hyper's Discord Bot
 
-This is a Discord bot I started coding out of boredom, it only works for ONE server per token.  
+This is a Discord bot I started coding out of boredom, it only works for ONE server per token.
+
+> [!CAUTION]
+> This bot is really glitchy, and was not thoroughly tested in any real capacity.
+> I do NOT recommend you using it for any means besides testing and experimenting with it.
+> It is public for the sole reason that I am working in a JavaCord bot, and I'm taking inspirations in some commands present here.
 
 - [Commands](#commands)
   * [Economy](#economy)
