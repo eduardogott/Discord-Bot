@@ -9,6 +9,10 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 > 
 > It is public for the sole reason that I am working in a JavaCord bot, and I'm taking inspirations in some commands present here.
 
+> [!WARNING]
+> This work has been abandoned for now, and won't see any update in the near future. Probably never.
+>
+> If you want for some reason to contribute with it, feel free, but the contribution will probably take a really long time to be implemented.
 - [Commands](#commands)
   * [Economy](#economy)
   * [Giveaways](#giveaways)
