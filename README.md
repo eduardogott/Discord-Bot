@@ -38,6 +38,9 @@ This is a Discord bot I started coding out of boredom, it only works for ONE ser
 - [Configuration](#configuration)
 
 # Commands
+> [!CAUTION]
+> Repeating again: Do NOT use this bot for any reason besides experimenting and testing it.
+
 > Commands in italics need **Manager** role, **DJ** role for [music](#music) commands, or being the channel creator for non-admin [TempChannels](#tempchannels) commands.
 
 ## Economy
